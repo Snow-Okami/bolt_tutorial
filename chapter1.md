@@ -54,3 +54,39 @@ Above is the *BoltInit* script attached to the main camera in the *ManuMenu* sce
 
 ![](images/img5.png)
 
+Before we launch our scene to make sure everything is working we need to setup a few things inside Unity, first we  have to add both our *MainMenu* and *Level2* scene to the Build Settings. Make sure that *MainMenu* comes before *Level2*.
+
+![](images/img6.png)
+
+Click the *Player Settings...* button in the *Build Settings* window. Under *Settings for PC, Mac & Linux Standalone* verify that you have the following settings correct.
+
+1. Default Is Full Screen - **DISABLED**  
+2. Default Screen Width - **640**
+3. Default Screen Height - **360**
+4. Run In Background - **ENABLED**
+5. Display Resolution Dialog - **DISABLED**
+
+![](images/img7.png) 
+
+You can obviously pick whatever width/height you want, but I find that if you want to run a couple of clients at the same time 640:360 is a good resolution. If you build a stand alone version of your project and start two copies of it, you will be greeted by the following screen.
+
+![](images/img8.png)
+
+Start one of the instances as *Server* and the other as *Client*, when you click server you get to pick a map to load, and since we only have one *Level2* pick that. On the *Client* you get to input an IP and Port, but the default should be fine so just click *Connect*. On each of the instances you will see a screen that looks like this.
+
+![](images/img9.png)
+
+Since we don't have any camera inside our *Level2* scene, all we get is the blue background from the previous scene. Let's look at another way to start our game, which is especially handy when we need to do quick testing.
+
+Open up the *Bolt Scenes* window by going to *Windows/Bolt Scenes*, it will look something like this.
+
+
+![](images/img10.png)
+
+This window looks a bit different depending on if you have Unity Pro or not, the window in the screenshot above is the version in Unity Pro, and if you have Unity Free you will not see the *Debug Start Settings* options or the *Debug Start* button. 
+
+*Debug Start* allows you to tell Bolt to start a server + N clients, and then have them all connect to each other and load the correct scene, without manually doing anything. To learn more about it watch this video.
+
+[![](http://img.youtube.com/vi/SIBu4SGxcRU/0.jpg)](http://www.youtube.com/watch?v=SIBu4SGxcRU)
+
+The button we are going to look at right now is the *Play As Server* button, this button simply starts the scene you click on as a Bolt server, and since it's easy to setup your game in Bolt so that you can switch between dedicated or listen servers, this gives a quick and easy way of testing features when developing.  
