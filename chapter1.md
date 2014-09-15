@@ -20,7 +20,7 @@ If you purchased through the Unity Asset Store, the best way to get the latest v
 
 If you purchased Bolt through our site, you should have been supplied a download link on the return page after your purchase, if you have for some reason lost this link email [support@boltengine.com](support@boltengine.com) to receive a new one. We also send out a link for every release of Bolt to your email. 
 
-## Installing Bolt
+## Basic settings and development features
 
 Extract the downloaded *Bolt\_VERSION.zip* package to a folder somewhere on your disk and find the .unitypackage file called *Bolt\_VERSION_CompleteWithTutorial.unitypackage*. Create a new unity project and import the package, this will leave you with a directory structure as in the image below.
 
@@ -80,7 +80,6 @@ Since we don't have any camera inside our *Level2* scene, all we get is the blue
 
 Open up the *Bolt Scenes* window by going to *Windows/Bolt Scenes*, it will look something like this.
 
-
 ![](images/img10.png)
 
 This window looks a bit different depending on if you have Unity Pro or not, the window in the screenshot above is the version in Unity Pro, and if you have Unity Free you will not see the *Debug Start Settings* options or the *Debug Start* button. 
@@ -89,4 +88,8 @@ This window looks a bit different depending on if you have Unity Pro or not, the
 
 [![](http://img.youtube.com/vi/SIBu4SGxcRU/0.jpg)](http://www.youtube.com/watch?v=SIBu4SGxcRU)
 
-The button we are going to look at right now is the *Play As Server* button, this button simply starts the scene you click on as a Bolt server, and since it's easy to setup your game in Bolt so that you can switch between dedicated or listen servers, this gives a quick and easy way of testing features when developing.  
+The button we are going to look at right now is the *Play As Server* button, this button is available for both Unity Pro and Unity Free users and simply starts the scene you click on as a Bolt server, and since it's easy to setup your game with Bolt so that you can switch between dedicated or listen servers, this gives a quick and easy way of testing features when developing, below you can see the server running inside of the editor after pressing *Play As Server*.  
+
+![](images/img11.png)
+
+That was all for this chapter, in the next one we will start developing code for our game.
