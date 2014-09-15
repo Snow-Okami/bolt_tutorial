@@ -51,6 +51,9 @@ You can also tell Bolt that a behaviour should only be available during specific
 ```csharp
 // only when the current scene is 'Level2'
 [BoltGlobalBehaviour("Level2")]
+
+// only when the current scene is 'Level1', 'Level2' or 'Level3' 
+[BoltGlobalBehaviour("Level1", "Level2", "Level3")]
 ```
 
 You can also combine these.
@@ -63,11 +66,17 @@ You can also combine these.
 [BoltGlobalBehaviour(BoltNetworkModes.Server, "Level2")]
 ```
 
-And you can list several scenes.
+This is an integral part of Bolt as it allows you to easily define behaviour that is global to the entire application or an entire scene, without having to manually fiddle around with passing a game object marked with `DontDestroyOnLoad` around through all of your scenes. Like we mentioned before it is **paramount** that you do not under any circumstance manually attach these scripts to an object in your scene, Bolt will handle this for you automatically.
 
-```csharp
-// only when the current scene is 'Level1', 'Level2' or 'Level3' 
-[BoltGlobalBehaviour("Level1", "Level2", "Level3")]
-```
+## Starting with our camera
 
-This is an integral part of Bolt as it allows you to easily define behaviour that is global to the entire application or an entire scene, without having to manually fiddle around with passing a game object marked with `DontDestroyOnLoad`. 
+Open the *Window/Bolt Scenes* window and click *Play As Server* on the *Level2* scene. You should now see the server starting in the *Game* window and our camera instantiate. 
+
+![](images/img13.png)
+
+If you look in the scene hierarchy you will see a game object called *Bolt*, this is bolts internal object and we went the route of making it competely visible (no HideFlags) so that you know what's going on at all times. If you check the inspector for this object you will see all of the internal behaviours that Bolt automatically instantiates, and also your 'Tutorial Player Callbacks' behaviour at the bottom. You will also see the PlayerCamera which was instantiated in the `SceneLoadLocalDone` callback.
+
+![](images/img14.png)
+
+
+... a lot more to come ...
