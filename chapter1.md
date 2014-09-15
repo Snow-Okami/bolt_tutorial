@@ -15,4 +15,6 @@ If you purchased Bolt through our site, you should have been supplied a download
 
 ## Installing Bolt
 
-Extract the downloaded *Bolt\_VERSION.zip* package to a folder somewhere on your disk and find the .unitypackage file called *Bolt\_VERSION_CompleteWithTutorial.unitypackage*
+Extract the downloaded *Bolt\_VERSION.zip* package to a folder somewhere on your disk and find the .unitypackage file called *Bolt\_VERSION_CompleteWithTutorial.unitypackage*. Create a new unity project and import the package, this will leave you with a directory structure as in the image below.
+
+![](images/img0.png)
