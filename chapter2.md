@@ -79,11 +79,63 @@ If you look in the scene hierarchy you will see a game object called *Bolt*, thi
 
 ## Spawning your character
 
-Start by creating a new empty game object and call it *Player*, make sure that it is positioned at (0, 0, 0) with rotation (0, 0, 0) and scale (1, 1, 1). The model we are going to use you can find im *bolt_tutorial/arg/models/sgtBolt* and the prefab is called *sgtBolt4Merged-ModelOnly*, drag an instance of this prefab into the hierarchy. Make sure the sgtBolt prefab has the same position, rotation and scale values as the *Player* game object. Now drag the *sgtBolt4Merged-ModelOnly* object as a child to your *Player* object.
+Start by creating a new empty game object and call it *TutorialPlayer*, make sure that it is positioned at (0, 0, 0) with rotation (0, 0, 0) and scale (1, 1, 1). The model we are going to use you can find im *bolt_tutorial/arg/models/sgtBolt* and the prefab is called *sgtBolt4Merged-ModelOnly*, drag an instance of this prefab into the hierarchy. Make sure the sgtBolt prefab has the same position, rotation and scale values as the *TutorialPlayer* game object. Now drag the *sgtBolt4Merged-ModelOnly* object as a child to your *TutorialPlayer* object.
 
 ![](images/img15.png)
 
-Create a new folder called *Prefabs* in your tutorial folder and drag your *Player* object into this folder to create a prefab out of it. You can now delete the Player object in the scene hierarchy.
+Create a new folder called *Prefabs* in your tutorial folder and drag your *TutorialPlayer* object into this folder to create a prefab out of it. You can now delete the *TutorialPlayer* object in the scene hierarchy.
 
 ![](images/img16.png)
 
+Select the *TutorialPlayer* prefab and add a *Bolt Entity* component to it. 
+
+![](images/img17.png)
+
+A *Bolt Entity* component is loosely related to a *Network View* in Unity or Photon, but it also serves a couple of additional purposes in Bolt. The first thing we want to do is to correct the two errors, this is simply done by going to the *Bolt/Compile Assets* menu option at the top menu bar.  
+
+When running *Bolt/Compile Assets* Bolt will go through all of your prefabs and other Bolt-related assets and compile a very efficient network protocol for them, which is then store inside of the *bolt.user.dll* assembly which you can find in *bolt/assemblies*. Running the *Compile Asset* command is done for several things in Bolt, but we will cover all of them in this tutorial.
+
+After you ran compile, the *Bolt Entity* component on your prefab should now look like this. As you can see there is still a warning here which we will get that to go away in just a minute.
+
+![](images/img18.png)
+
+## State in Bolt
+
+Before we get into the details, lets define what *"state"* in Bolt actually is. State is the transform, animation and data of your game object. Bolt will **automatically** replicate any state that you assign to your entities over the network, including transform and animations (mecanim only, no legacy support).
+
+State is defined in a custom asset type called *Bolt State*, since Bolt produces actual code out of these assets I prefer to keep them next to my script files. Create a new folder called *TutorialPlayer* under your *tutorial/Scripts* folder, right-click on your new folder and select *Create/Bolt/State*, name your new state asset *TutorialPlayerState*. 
+
+![](images/img19.png)
+
+![](images/img20.png)
+
+Let's look closer on the state asset itself, bring up it's inspector and you will see something like the picture below.
+
+![](images/img21.png)
+
+Bolt comes with two pre-defined state properties that can't be removed, one for transform and one for mecanim animation - if you don't want these you can disable them by clicking on the little blue light on the left side of their name. We are going to use both of these for our tutorial so leave them both active. All properties defined on a state have two options in common.
+
+**Replicate When** decides when the value of a property should be replicated to remote computers.
+
+  * **ValueChanged** means the property will be replicated to remote computers when the value of it changes.
+  * **On First Replication** tells Bolt to only replicat the value of the property the first time a remote computer is made aware of this entity.
+
+Before we get into details on the next property in Bolt it is important to explain how Bolt deals with ownership of replicated objects. When you create an instance of a game object in Bolt, using the `BoltNetwork.Instantiate`  function, the computer which called this function will be considered the *owner* of this object. This part is very important so it's worth saying again: **Only the computer where `BoltNetwork.Instantiate` was called will be the owner of an object.**
+
+You can check if you are the owner of an object or not by accessing the `isOwner` property on the *Bolt Entity* component attached to your object. Everyone else who has received a replicated copy of the object will have the `isOwner` property return false. The person which is the owner has full authority over the object. 
+
+Bolt has a secondary concept of having *control* of an object, this is separate from being the *owner* of an object. The *owner* of an object can assign *control* of the object either to itself or to a remote connection. This is the part which lets Bolt implement a lot of complex authoritative features like movement and shooting in a very clean and easy to use way.
+
+Assume you are going to create an authoritative third person shooter (as we are doing in this tutorial). The server would instantiate all player objects in the world, which would make the server the *owner* of every player object. It would then assign *control* of one player object each to their respective clients. The server can also spawn a player object for itself and then assign *control* of the object to itself, letting the server act as another player.
+
+Now, let's discuss the details of the next state property.
+
+**Replicate To** controls whom should get the value of this property replicated to them.
+  * **Everyone** this option is rather self explanatory, this means that everyone in the world will receive this ppproeprpty.
+  * **Everyone Except Controller** this means that everyone in the world (including the owner) will receive this property *except* the player that has been assigned *control*
+  * **Only Owner And Controller** only the owner and the computer that has been assigned control of this object will receive the property.
+  * **Only Owner** only the owner will have the value of this property available to it, this means that this property will never be sent over the network.
+
+Both our *Transform* and *Mecanim* properties should be set to **Everyone Except Controller**, as the computer with *control* will be using a different mechanism of moving their entity around (more on this later).
+
+![](images/img22.png)
