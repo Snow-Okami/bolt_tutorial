@@ -136,6 +136,6 @@ Now, let's discuss the details of the next state property.
   * **Only Owner And Controller** only the owner and the computer that has been assigned control of this object will receive the property.
   * **Only Owner** only the owner will have the value of this property available to it, this means that this property will never be sent over the network.
 
-Both our *Transform* and *Mecanim* properties should be set to **Everyone Except Controller**, as the computer with *control* will be using a different mechanism of moving their entity around (more on this later).
+Both our *Transform* and *Mecanim* properties should be set to **Everyone Except Controller**, as the computer with *control* of the object will be using a different mechanism of moving and animating their entity (more on this later).
 
 ![](images/img22.png)
