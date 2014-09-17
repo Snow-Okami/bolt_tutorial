@@ -239,7 +239,29 @@ If you go to the *Bolt Scenes* window and click *Play As Server* you will see a 
 
 ![](images/img28.png)
 
-We have spawned our character, we have been assigned control of it and the camera is looking at it. Next up is moving around and controlling our character.
+We have spawned our character, we have been assigned control of it and the camera is looking at it. Next up is moving around and controlling our character. You can also build a separate client and connect to the server you are starting in the editor with it, you will see that the client gets spawned properly and assigned a character just like the server is.
+
+**Note:** *Due to the way the camera code works you can not rotate it around your character, it's completely static if the character is not moving, this is intentional*
+
+## Movement
+
+This section of the tutorial deals with something a lot of people ask about: Authoritative movement with client side prediction for instant movement on the clients that is still controlled and verified by the server. It also does this completely transparently and removes the differences between being a *client* and a *server* from movement codes point of view.
+
+We are going to start by creating a *Bolt Command*, we're putting it in the tutorial/Scripts/Player folder and calling it *TutorialPlayerCommand*, right click on the *Player* folder and navigate *Create/Bolt/Command* to create one. 
+
+![](images/img29.png)
+
+![](images/img30.png)
+
+If you select the command you will see it's inspector. Right now there's not much here except two headers saying *Input* and *Result*
+
+![](images/img31.png)
+
+Before we start adding properties to our command, let's go into detail on exactly what *Input* and *Result* represents. 
+
+**Input** in general terms encapsulates player input from one player. This is often something like *"Forward"* and *"Backward"* for movement, or *"YRotation"* and *"XRotation"* for mouse rotation. But it can also be a bit more abstract such as *"SelectedWeapon"*.
+
+
 
 
 [Next Chapter >>](chapter4.md)
