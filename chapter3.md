@@ -261,6 +261,25 @@ Before we start adding properties to our command, let's go into detail on exactl
 
 **Input** in general terms encapsulates player input from one player. This is often something like *"Forward"* and *"Backward"* for movement, or *"YRotation"* and *"XRotation"* for mouse rotation. But it can also be a bit more abstract such as *"SelectedWeapon"*.
 
-**Result** encapsulate the state which is the result of applying the **Input** to your object, common properties here are things like *position* and *velocity* but also thing like *isGrounded*
+**Result** encapsulate the state which is the result of applying the **Input** to your object, common properties here are values for *position* and *velocity* but also flags for different types of state as *isGrounded*, etc.
+
+With this in mind, let's start adding some input to our command. We want the following **input** properties.
+
+* **forward** - Bool. If we are holding down the forward key.
+* **backward** - Bool. If we are holding down the backward key.
+* **left** - Bool. If we are holding down the left key.
+* **right** - Bool. If we are holding down the right key.
+* **jump** - Bool. If we pressed the down the jump key.
+* **yaw** - Float. Our current rotation on the Y axis.
+* **pitch** - Float. Our current rotation on the X axis.
+
+![](images/img32.png)
+
+The **result** state of applying our input is represented by the following four properties.
+
+* **position** - Vector3.
+* **velocity** - Vector3.
+* **isGrounded** - Bool. If we are touching the ground or not.
+* **jumpFrames** - Byte. This one is a bit tricky to explain, but it basically counts how many "frames" we have left of applying our jump force on. This is a detail specific to the character motor we will be using.
 
 [Next Chapter >>](chapter4.md)
