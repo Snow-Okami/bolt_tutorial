@@ -198,3 +198,5 @@ Start an instance of the server by pressing the *Play As Server* button in the *
 
 You can also build and launch a separate client which connects to the server, you will see that you get two *TutorialPlayer* prefab instances in the hierarchy.
 
+[<< Prev Chapter](chapter1.md)
+[Next Chapter >>](chapter3.md)
