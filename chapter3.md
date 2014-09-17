@@ -261,7 +261,6 @@ Before we start adding properties to our command, let's go into detail on exactl
 
 **Input** in general terms encapsulates player input from one player. This is often something like *"Forward"* and *"Backward"* for movement, or *"YRotation"* and *"XRotation"* for mouse rotation. But it can also be a bit more abstract such as *"SelectedWeapon"*.
 
-
-
+**Result** encapsulate the state which is the result of applying the **Input** to your object, common properties here are things like *position* and *velocity* but also thing like *isGrounded*
 
 [Next Chapter >>](chapter4.md)
