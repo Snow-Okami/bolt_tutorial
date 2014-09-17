@@ -121,7 +121,7 @@ Open up the *TutorialServerCallbacks.cs* file an update the class we have in the
 
 Also in `TutorialServerCallbacks` override the method called `ClientConnected` inherited from `BoltCallbacks`. Inside of it call `TutorialPlayerObjectRegistry.CreateClientPlayer` and pass in the connection argument.
 
-```chsarp
+```csharp
 using UnityEngine;
 
 [BoltGlobalBehaviour(BoltNetworkModes.Server)]
