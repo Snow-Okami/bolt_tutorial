@@ -6,4 +6,5 @@ In this chapter we will handle taking control of entities and moving around in t
 
 
 [<< Prev Chapter](chapter2.md)
+
 [Next Chapter >>](chapter4.md)
