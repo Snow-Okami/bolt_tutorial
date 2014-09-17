@@ -117,9 +117,11 @@ public static class TutorialPlayerObjectRegistry {
 }
 ```
 
-Open up the *TutorialServerCallbacks.cs* file an update the class we have in there, remove the two calls to `BoltNetwork.Instantiate`. Implement the unity `Awake` and call `TutorialPlayerObjectRegistry.CreateServerPlayer` inside it, this creates the server player for us whenever this callback object becomes active.
+Open up the *TutorialServerCallbacks.cs* file an update the class we have in there, remove the two calls to `BoltNetwork.Instantiate`. 
 
-Also in `TutorialServerCallbacks` override the method called `ClientConnected` inherited from `BoltCallbacks`. Inside of it call `TutorialPlayerObjectRegistry.CreateClientPlayer` and pass in the connection argument.
+Implement the unity `Awake` function and call `TutorialPlayerObjectRegistry.CreateServerPlayer` inside it, this creates the server player for us whenever this callback object becomes active.
+
+Also in `TutorialServerCallbacks` override the method called `ClientConnected` which is inherited from `BoltCallbacks`. Inside of it call `TutorialPlayerObjectRegistry.CreateClientPlayer` and pass in the connection argument.
 
 ```csharp
 using UnityEngine;
@@ -143,6 +145,101 @@ public class TutorialServerCallbacks : BoltCallbacks {
 
 ```
 
+It's finally time to spawn the characters for each of our players and also assign control of them correctly, open up the `TutorialPlayerObject` class again and we are going to add two new methods: `Spawn` and `RandomPosition`. `Spawn` will spawn our character and `RandomPosition` simply picks a random position in the world to spawn at.
+
+```csharp
+using UnityEngine;
+using System.Collections.Generic;
+
+public class TutorialPlayerObject {
+  public BoltEntity character;
+  public BoltConnection connection;
+
+  public bool isServer {
+    get { return connection == null; }
+  }
+
+  public bool isClient {
+    get { return connection != null; }
+  }
+
+  public void Spawn() {
+    if (!character) {
+      character = BoltNetwork.Instantiate(BoltPrefabs.TutorialPlayer);
+
+      if (isServer) {
+        character.TakeControl();
+      } else {
+        character.GiveControl(connection);
+      }
+    }
+
+    // teleport entity to a random spawn position
+    character.Teleport(RandomPosition());
+  }
+
+  Vector3 RandomPosition() {
+    float x = Random.Range(-32f, +32f);
+    float z = Random.Range(-32f, +32f);
+    return new Vector3(x, 32f, z);
+  }
+}
+```
+
+I wont explain `RandomPosition` as it simply returns a random vector (position) in the world, but let's look closer at the `Spawn` function. In `Spawn` we first check if we have a character or not and if we **dont** have one we call `BoltNetwork.Instantiate` and create one. Then we simply check if we are the server or not and call the proper method for taking or giving control.
+
+We then simply call the `Teleport` function on the character object which moves our player to a random position in the world.
+
+Before we start our game, there is two more things we need to handle. First open up the `TutorialPlayerCallbacks` class found in *tutorial/Scripts/Callbacks*. We are going to override a callback called `ControlOfEntityGained` which notifies us of when we get control of an entity.
+
+```csharp
+using UnityEngine;
+
+[BoltGlobalBehaviour]
+public class TutorialPlayerCallbacks : BoltCallbacks {
+  public override void SceneLoadLocalDone(string map) {
+    // this just instantiates our player camera, 
+    // the Instantiate() method is supplied by the BoltSingletonPrefab<T> class
+    PlayerCamera.Instantiate();
+  }
+
+  public override void ControlOfEntityGained(BoltEntity arg) {
+    // this tells the player camera to look at the entity we are controlling
+    PlayerCamera.instance.SetTarget(arg);
+  }
+}
+```
+
+The last thing we need to do is go back to the `TutorialServerCallbacks` and call the `Spawn` method when we are done loading the scene, since this behaviour exists on the server (courtesy of the `[BoltGlobalBehaviour(BoltNetworkModes.Server)]` attribute) we need to check both for the *SceneLoadLocalDone* for the server itself and for the *SceneLoadRemoteDone* for the clients.
+
+```csharp
+using UnityEngine;
+
+[BoltGlobalBehaviour(BoltNetworkModes.Server)]
+public class TutorialServerCallbacks : BoltCallbacks {
+  void Awake() {
+    TutorialPlayerObjectRegistry.CreateServerPlayer();
+  }
+
+  public override void ClientConnected(BoltConnection arg) {
+    TutorialPlayerObjectRegistry.CreateClientPlayer(arg);
+  }
+
+  public override void SceneLoadLocalDone(string map) {
+    TutorialPlayerObjectRegistry.serverPlayer.Spawn();
+  }
+
+  public override void SceneLoadRemoteDone(BoltConnection connection, string map) {
+    TutorialPlayerObjectRegistry.GetTutorialPlayer(connection).Spawn();
+  }
+}
+```
+
+If you go to the *Bolt Scenes* window and click *Play As Server* you will see a screen like the one below.
+
+![](images/img28.png)
+
+We have spawned our character, we have been assigned control of it and the camera is looking at it. Next up is moving around and controlling our character.
 
 
 [Next Chapter >>](chapter4.md)
