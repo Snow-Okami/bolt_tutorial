@@ -77,7 +77,7 @@ If you look in the scene hierarchy you will see a game object called *Bolt*, thi
 
 ![](images/img14.png)
 
-## Spawning your character
+## Creating our prefab
 
 Start by creating a new empty game object and call it *TutorialPlayer*, make sure that it is positioned at (0, 0, 0) with rotation (0, 0, 0) and scale (1, 1, 1). The model we are going to use you can find im *bolt_tutorial/arg/models/sgtBolt* and the prefab is called *sgtBolt4Merged-ModelOnly*, drag an instance of this prefab into the hierarchy. Make sure the sgtBolt prefab has the same position, rotation and scale values as the *TutorialPlayer* game object. Now drag the *sgtBolt4Merged-ModelOnly* object as a child to your *TutorialPlayer* object.
 
@@ -139,3 +139,62 @@ Now, let's discuss the details of the next state property.
 Both our *Transform* and *Mecanim* properties should be set to **Everyone Except Controller**, as the computer with *control* of the object will be using a different mechanism of moving and animating their entity (more on this later).
 
 ![](images/img22.png)
+
+It's time to compile Bolt again, from the top menu select *Bolt/Compile Assets*, Bolt will go through all assets and find the TutorialPlayerState asset and compile it into an interface called `ITutorialPlayerState`.
+
+Create a new C# script in the *tutorial/Scripts/Player* folder, name it *TutorialPlayerSerializer*.
+
+![](images/img23.png)
+
+Have the *TutorialPlayerSerializer* inherit from BoltEntitySerializer\<ITutorialPlayerState\>. For now this is all we need to do here, we will come back to the serializer later.
+
+```csharp
+using UnityEngine;
+using System.Collections;
+
+public class TutorialPlayerSerializer : BoltEntitySerializer<ITutorialPlayerState> {
+
+}
+```
+
+![](images/img24.png)
+
+Add the *TutorialPlayerSerializer* script to your *TutorialPlayer* prefab, then drag the *TutorialPlayerSerializer* on the prefab into the *Serializer* slot on the *Bolt Entity* component.
+
+## Scene loading callbacks 
+
+We have one more thing to do before we can spawn a character for our game, we need to hook into a callback on the server to instantiate our prefab for both the server and clients.
+
+Create a new script called `TutorialServerCallbacks` under the *tutorial/Scripts/Callbacks* folder. 
+
+![](images/img25.png)
+
+```csharp
+using UnityEngine;
+
+[BoltGlobalBehaviour(BoltNetworkModes.Server)]
+public class TutorialServerCallbacks : BoltCallbacks {
+  public override void SceneLoadLocalDone(string map) {
+    BoltNetwork.Instantiate(BoltPrefabs.TutorialPlayer);
+  }
+
+  public override void SceneLoadRemoteDone(BoltConnection connection, string map) {
+    BoltNetwork.Instantiate(BoltPrefabs.TutorialPlayer);
+  }
+}
+```
+
+Our `TutorialServerCallbacks` class should inherit from `BoltCallbacks`, we should also decorate the class with a `BoltGlobalBehaviour` which has the option for only running on the server passed in.
+
+We are also overriding two callbacks that have to do with scene loading, the first one called  `SceneLoadLocalDone` will be invoked when the local computer is done loading the scene and since this behaviour is marked as to only run on the server it will only be active on the server.
+
+`SceneLoadRemoteDone` will be called when the remote end on the connection that is being passed in has loaded the scene, since again we are only running this behaviour on the server this lets us tell when a client is done loading the current scene.
+
+In both methods we simply instantiate a copy of our TutorialPlayer prefab. Notice that the class `BoltPrefabs` contains a field for each of your bolt entity prefabs, so you always have easy access to all of them.
+
+Start an instance of the server by pressing the *Play As Server* button in the *Bolt Scenes* window. Not a lot will differ from the previous time we started our scene, but if you look in the hierarchy you will see an instance of our *TutorialPlayer* prefab. 
+
+![](images/img26.png)
+
+You can also build and launch a separate client which connects to the server, you will see that you get two *TutorialPlayer* prefab instances in the hierarchy.
+
