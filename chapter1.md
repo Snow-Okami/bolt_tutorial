@@ -92,6 +92,13 @@ The button we are going to look at right now is the *Play As Server* button, thi
 
 ![](images/img11.png)
 
+## Setting up our Layers
+
+One last thing we need to do before we continue is to setup the correct Layers which we will be using later on. Open up the *Edit/Project Settings/Tags and Layers* settings. Make sure your layer settings match the following ones:
+
+![](images/img38.png)
+
+
 That was all for this chapter, in the next one we will start developing code for our game.
 
 [Next Chapter >>](chapter2.md)

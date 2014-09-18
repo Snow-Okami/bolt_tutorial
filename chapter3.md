@@ -299,7 +299,7 @@ The *TutorialPlayerCommand* that we created earlier is made to fit exactly with 
 
 ![](images/img34.png)
 
-Attach a copy of the *TutorialPlayerMotor* component to your *TutorialPlayer* prefab, also attach a *Character Controller* component to it. Make sure that the Center value for the *Character Controller* is set to (0, 1, 0) and that the Radius is set to 0.55.
+Attach a copy of the *TutorialPlayerMotor* component to your *TutorialPlayer* prefab, also attach a *Character Controller* component to it. Make sure that the Center value for the *Character Controller* is set to (0, 1, 0) and that the Radius is set to 0.55, also make sure that *Layer Mask* setting on the *TutorialPlayerMotor* has "World" selected.
 
 If you drag a copy of your prefab into the scene window it should look something like this. **Make sure to delete the prefab copy before you continue.**   
 
@@ -319,7 +319,122 @@ public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState
 }
 ```
 
+Now we're going to write pretty large chunk of code. Begin by adding two fields and a constant to the `TutorialPlayerController` class.
 
+```csharp
+using UnityEngine;
 
+public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState> {
+  const float MOUSE_SENSEITIVITY = 2f;
+
+  TutorialPlayerMotor _motor;
+  TutorialPlayerCommand.Input _input; 
+
+  // ...
+```
+
+Then we are just defining the standard Unity `Awake` method and get a reference to the motor in it.
+
+```csharp
+  // ... 
+
+  void Awake() {
+    _motor = GetComponent<TutorialPlayerMotor>();
+  }
+
+  // ...
+```
+
+The `_input` field we defined contains the **Input** properties we defined on our *TutorialPlayerCommand*. We are now going to define a function called `PollKeys` which will fill out our input data.
+
+```csharp
+  // ...
+
+  void PollKeys(bool mouse) {
+    _input.forward = Input.GetKey(KeyCode.W);
+    _input.backward = Input.GetKey(KeyCode.S);
+    _input.left = Input.GetKey(KeyCode.A);
+    _input.right = Input.GetKey(KeyCode.D);
+    _input.jump = Input.GetKeyDown(KeyCode.Space);
+
+    if (mouse) {
+      _input.yaw += (Input.GetAxisRaw("Mouse X") * MOUSE_SENSEITIVITY);
+      _input.yaw %= 360f;
+
+      _input.pitch += (-Input.GetAxisRaw("Mouse Y") * MOUSE_SENSEITIVITY);
+      _input.pitch = Mathf.Clamp(_input.pitch, -85f, +85f);
+    }
+  }
+
+  // ...
+```
+
+This is pretty much standard Unity Input code, so not a lot to talk about - the only thing really interesting is the `bool mouse` parameter which tells us if we should poll the mouse input or not, more on this later.
+
+Since Unity refreshes the state of the `Input` class inside `Update`, we are going to define a very simple `Update` function like this, just calling our `PollKeys` function. We pass true to the `PollKeys` function so that we read our mouse movement also.
+
+```csharp
+  // ...
+
+  void Update() {
+    PollKeys(true);
+  }
+
+  // ...
+```
+
+Time to get into some Bolt specific stuff, we are going to override a method called `SimulateController`, which is only invoked on the computer which has been assigned *control* of an entity. The first thing we do is call `PollKeys` again, but we pass in `false` saying we don't want it to read the mouse data. The reason for this is that if we had read the mouse data here again we would double our mouse movement.
+
+Next we are calling `BoltFactory.NewCommand<TutorialPlayerCommand>()` to create an instance of our command class that Bolt has compiled for us from the *TutorialPlayerCommand* asset.
+
+Since we are using the `TutorialPlayerCommand.Input` type for our class variable `_input` we can just assign this to the input of the command right away.
+
+The last thing we will do is to call `QueueCommand` on our entity, this sends the command of to both the server and client for processing and is what lets Bolt do its client prediction but still maintain authority on the server. 
+
+```csharp
+  // ..
+
+  public override void SimulateController() {
+    PollKeys(false);
+
+    TutorialPlayerCommand cmd;
+
+    cmd = BoltFactory.NewCommand<TutorialPlayerCommand>();
+    cmd.input = this._input;
+
+    entity.QueueCommand(cmd);
+  }
+
+  // ..
+```
+
+Phew ... we are soon done, one more method. I would argue that this method is the most important one in all of Bolt, this is *where the magic happens* when it comes to authoritative movement and control. Meet `ExecuteCommand`, it executes on both the *controller* and the *owner* of an entity. 
+
+The first parameter to this function is always a command which you have sent with `QueueCommand` from `SimulateController`. The second parameter called `resetState` it is important to note that this **can only be true on the controller**, it tells the controller (usually the client) that the owner (usually the server) sent a correction to it, and we should reset the state of our motor.
+
+Inside the code of the function we check if `resetState` is true, if it is we don't "execute" the command and we simply reset to its state. If it's not true we apply the input of the command to the motor by calling `Move`, which returns a new state which we **assign to the `state` property on the command that was passed in**. 
+
+Assigning the state of the motor to the command passed in is very important, this is what lets Bolt forward the correct result of the command to the controller from the owner. 
+
+```csharp
+  // ..
+
+  public override void ExecuteCommand(BoltCommand c, bool resetState) {
+    TutorialPlayerCommand cmd = (TutorialPlayerCommand)c;
+
+    if (resetState) {
+      // we got a correction from the server, reset (this only runs on the client)
+      _motor.SetState(cmd.state);
+    }
+    else {
+      // apply movement (this runs on both server and client)
+      cmd.state = _motor.Move(cmd.input);
+    }
+  }
+
+  // ...
+```
+
+If you hit *Play As Server* now, you should be able to run around in the world (without animations) and move your character.
 
 [Next Chapter >>](chapter4.md)
