@@ -494,6 +494,10 @@ public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState
     }
   }
 }
-``` 
+```
+
+Here is a screenshot of the server (in the editor) with two clients connected.
+
+![](images/img39.png) 
 
 [Next Chapter >>](chapter4.md)
