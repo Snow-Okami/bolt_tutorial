@@ -23,7 +23,7 @@ public class TutorialPlayerObject {
 }
 ``` 
 
-This is a standard C# class, it does **not** inherit from unity's `MonoBehaviour` class. This is very important. It also contains two fields called `character` and `connection`. The `character` field will contain the instantiated object which represents the player's character in the world. The `connection` field will contain the connection to this player **if one exists**, this will be `null` on the server for the servers player object.
+This is a standard C# class; it does **not** inherit from unity's `MonoBehaviour` class. This is very important. It also contains two fields called `character` and `connection`. The `character` field will contain the instantiated object which represents the player's character in the world. The `connection` field will contain the connection to this player **if one exists**, this will be `null` on the server for the servers player object.
 
 We are going to add two properties also, which lets us check if this is a client or a server player object without having to deal with the `connection` field directly.
 
@@ -286,7 +286,7 @@ The **result** state of applying our input is represented by the following four 
 
 Our command is done, we are going to add more to it later but for now it's all we need to get movement working. 
 
-Compile Bolt again by going to *Assets/Compile Bolt Assets*, doing this Bolt will update it's internal data with the new command we created.
+Compile Bolt again by going to *Assets/Compile Bolt Assets*, doing this Bolt will update its internal data with the new command we created.
 
 The next thing we need to setup is the character motor, this is the component that is responsible for  moving our character around in the world. Create a new file called *TutorialPlayerMotor.cs* in *tutorial/Scripts/Player*.  
 
@@ -294,8 +294,8 @@ Writing an entire character motor is well outside the scope of this tutorial, so
 
 The *TutorialPlayerCommand* that we created earlier is made to fit exactly with the motor, so if you are getting any compilation errors when you copy-paste the *TutorialPlayerMotor.cs* code, verify that the following is correct:
 
-1. You are using the exact sae property names and types for Input and Result on the command.
-2. You have run the *Assets/Compile Bolt Asset* menu opton.
+1. You are using the exact same property names and types for Input and Result on the command.
+2. You have run the *Assets/Compile Bolt Asset* menu option.
 
 ![](images/img34.png)
 
@@ -494,10 +494,6 @@ public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState
     }
   }
 }
-```
-
-Here is a screenshot of the server (in the editor) with two clients connected.
-
-![](images/img39.png) 
+``` 
 
 [Next Chapter >>](chapter4.md)
