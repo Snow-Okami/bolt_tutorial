@@ -42,11 +42,11 @@ Your folder structure should now look like this.
  
 ![](images/img3.png)
 
-Inside the *bolt\_tutorial/scenes* folder there is an preexisting level we are going to use, you are free to make your own before we continue. If you chose to use our level, copy the scene at *bolt\_tutorial/scenes/Level1.unity* into your own *tutorial/Scenes* folder and rename it *Level2.unity*. Our level looks like this.
+Inside the *bolt\_tutorial/scenes* folder there is a preexisting level we are going to use, you are free to make your own before we continue. If you chose to use our level, copy the scene at *bolt\_tutorial/scenes/Level1.unity* into your own *tutorial/Scenes* folder and rename it *Level2.unity*. Our level looks like this.
 
 ![](images/img2.png)
 
-We also need a *MainMenu* scene so that we have an easy way of starting our game while developing it, Bolt comes with a simple script which helps us do this. Create a new scene, on the Main Camera in the empty scene attach the script found in *bolt/scripts/BoltInit.cs*, save this scene to *tutorial/Scenes/MainMenu.unity*
+We also need a *MainMenu* scene so that we have an easy way of starting our game while developing it; Bolt comes with a simple script which helps us do this. Create a new scene; on the Main Camera in the empty scene attach the script found in *bolt/scripts/BoltInit.cs*, save this scene to *tutorial/Scenes/MainMenu.unity*
 
 ![](images/img4.png)
 
@@ -68,7 +68,7 @@ Click the *Player Settings...* button in the *Build Settings* window. Under *Set
 
 ![](images/img7.png) 
 
-You can obviously pick whatever width/height you want, but I find that if you want to run a couple of clients at the same time 640:360 is a good resolution. If you build a stand alone version of your project and start two copies of it, you will be greeted by the following screen.
+You can obviously pick whatever width/height you want, but I find that if you want to run a couple of clients at the same time 640:360 is a good resolution. If you build a standalone version of your project and start two copies of it, you will be greeted by the following screen.
 
 ![](images/img8.png)
 
