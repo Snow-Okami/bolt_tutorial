@@ -8,9 +8,9 @@ Bolt deals with replication in a completely different way compared to most (all?
 
 The first thing we are going to do is just to setup a camera so that we can see what's going on, but instead of just dropping a camera into the scene we will go through Bolt and hook into some of it's callbacks. The finished tutorial comes with an already functioning camera which has all the features we need, and since this tutorial is not about building a third person camera, we are just going to use it verbatim.
 
-You will find the camera prefab in *bolt_tutorial/prefabs/singletons/resources/PlayerCamera* and it's associated script is available in *bolt_tutorial/scripts/player/PlayerCamera.cs*. The camera script inherits from a utility base class defined inside bolt called BoltSingletonPrefab\<T\>, it is used to automatically load a prefab from a *Resources*.
+You will find the camera prefab in *bolt_tutorial/prefabs/singletons/resources/PlayerCamera* and its associated script is available in *bolt_tutorial/scripts/player/PlayerCamera.cs*. The camera script inherits from a utility base class defined inside bolt called BoltSingletonPrefab\<T\>, it is used to automatically load a prefab from a *Resources*.
 
-Time to create our first script, in our own tutorial folder create the a script called *TutorialPlayerCallbacks.cs* in the folder *tutorial/Scripts/Callbacks*. 
+Time to create our first script, in our own tutorial folder create a script called *TutorialPlayerCallbacks.cs* in the folder *tutorial/Scripts/Callbacks*. 
 
 * Have the class inherit from `BoltCallbacks`
 * Apply the `[BoltGlobalBehaviour]` to the class
@@ -75,13 +75,13 @@ Open the *Window/Bolt Scenes* window and click *Play As Server* on the *Level2* 
 
 ![](images/img13.png)
 
-If you look in the scene hierarchy you will see a game object called *Bolt*, this is bolts internal object and we went the route of making it competely visible (no HideFlags) so that you know what's going on at all times. If you check the inspector for this object you will see all of the internal behaviours that Bolt automatically instantiates, and also your `TutorialPlayerCallbacks` behaviour at the bottom. You will also see the PlayerCamera which was instantiated in the `SceneLoadLocalDone` callback.
+If you look in the scene hierarchy you will see a game object called *Bolt*, this is bolts internal object and we went the route of making it completely visible (no HideFlags) so that you know what's going on at all times. If you check the inspector for this object you will see all of the internal behaviours that Bolt automatically instantiates, and also your `TutorialPlayerCallbacks` behaviour at the bottom. You will also see the PlayerCamera which was instantiated in the `SceneLoadLocalDone` callback.
 
 ![](images/img14.png)
 
 ## Creating our prefab
 
-Start by creating a new empty game object and call it *TutorialPlayer*, make sure that it is positioned at (0, 0, 0) with rotation (0, 0, 0) and scale (1, 1, 1). The model we are going to use you can find im *bolt_tutorial/arg/models/sgtBolt* and the prefab is called *sgtBolt4Merged-ModelOnly*, drag an instance of this prefab into the hierarchy. Make sure the sgtBolt prefab has the same position, rotation and scale values as the *TutorialPlayer* game object. Now drag the *sgtBolt4Merged-ModelOnly* object as a child to your *TutorialPlayer* object.
+Start by creating a new empty game object and call it *TutorialPlayer*, make sure that it is positioned at (0, 0, 0) with rotation (0, 0, 0) and scale (1, 1, 1). The model we are going to use you can find in *bolt_tutorial/art/models/sgtBolt* and the prefab is called *sgtBolt4Merged-ModelOnly*, drag an instance of this prefab into the hierarchy. Make sure the sgtBolt prefab has the same position, rotation and scale values as the *TutorialPlayer* game object. Now drag the *sgtBolt4Merged-ModelOnly* object as a child to your *TutorialPlayer* object.
 
 ![](images/img15.png)
 
@@ -103,7 +103,7 @@ After you ran compile, the *Bolt Entity* component on your prefab should now loo
 
 ## State in Bolt
 
-Before we get into the details, lets define what *"state"* in Bolt actually is. State is the transform, animation and data of your game object. Bolt will **automatically** replicate any state that you assign to your entities over the network, including transform and animations (mecanim only, no legacy support).
+Before we get into the details, let's define what *"state"* in Bolt actually is. State is the transform, animation and data of your game object. Bolt will **automatically** replicate any state that you assign to your entities over the network, including transform and animations (mecanim only, no legacy support).
 
 State is defined in a custom asset type called *Bolt State*, since Bolt produces actual code out of these assets I prefer to keep them next to my script files. Create a new folder called *TutorialPlayer* under your *tutorial/Scripts* folder, right-click on your new folder and select *Create/Bolt/State*, name your new state asset *TutorialPlayerState*. 
 
@@ -111,7 +111,7 @@ State is defined in a custom asset type called *Bolt State*, since Bolt produces
 
 ![](images/img20.png)
 
-Let's look closer on the state asset itself, bring up it's inspector and you will see something like the picture below.
+Let's look closer on the state asset itself, bring up its inspector and you will see something like the picture below.
 
 ![](images/img21.png)
 
@@ -120,7 +120,7 @@ Bolt comes with two pre-defined state properties that can't be removed, one for 
 **Replicate When** decides when the value of a property should be replicated to remote computers.
 
   * **ValueChanged** means the property will be replicated to remote computers when the value of it changes.
-  * **On First Replication** tells Bolt to only replicat the value of the property the first time a remote computer is made aware of this entity.
+  * **On First Replication** tells Bolt to only replicate the value of the property the first time a remote computer is made aware of this entity.
 
 Before we get into details on the next property in Bolt it is important to explain how Bolt deals with ownership of replicated objects. When you create an instance of a game object in Bolt, using the `BoltNetwork.Instantiate`  function, the computer which called this function will be considered the *owner* of this object. This part is very important so it's worth saying again: **Only the computer where `BoltNetwork.Instantiate` was called will be the owner of an object.**
 
@@ -132,11 +132,11 @@ Assume you are going to create an authoritative third person shooter (as we are 
 
 Now, let's discuss the details of the next state property.
 
-**Replicate To** controls whom should get the value of this property replicated to them.
-  * **Everyone** this option is rather self explanatory, this means that everyone in the world will receive this ppproeprpty.
+**Replicate To** controls who should get the value of this property replicated to them.
+  * **Everyone** this option is rather self explanatory; this means that everyone in the world will receive this property.
   * **Everyone Except Controller** this means that everyone in the world (including the owner) will receive this property *except* the player that has been assigned *control*
   * **Only Owner And Controller** only the owner and the computer that has been assigned control of this object will receive the property.
-  * **Only Owner** only the owner will have the value of this property available to it, this means that this property will never be sent over the network.
+  * **Only Owner** only the owner will have the value of this property available to it; this means that this property will never be sent over the network.
 
 Both our *Transform* and *Mecanim* properties should be set to **Everyone Except Controller**, as the computer with *control* of the object will be using a different mechanism of moving and animating their entity (more on this later).
 
@@ -144,7 +144,7 @@ Both our *Transform* and *Mecanim* properties should be set to **Everyone Except
 
 It's time to compile Bolt again, from the top menu select *Bolt/Compile Assets*, Bolt will go through all assets and find the TutorialPlayerState asset and compile it into an interface called `ITutorialPlayerState`.
 
-Create a new C# script in the *tutorial/Scripts/Player* folder, name it *TutorialPlayerSerializer*.
+Create a new C# script in the *tutorial/Scripts/TutorialPlayer* folder, name it *TutorialPlayerSerializer*.
 
 ![](images/img23.png)
 
@@ -161,11 +161,11 @@ public class TutorialPlayerSerializer : BoltEntitySerializer<ITutorialPlayerStat
 
 ![](images/img24.png)
 
-Add the *TutorialPlayerSerializer* script to your *TutorialPlayer* prefab, then drag the *TutorialPlayerSerializer* on the prefab into the *Serializer* slot on the *Bolt Entity* component.
+Add the *TutorialPlayerSerializer* script to your *TutorialPlayer* prefab, and then drag the *TutorialPlayerSerializer* on the prefab into the *Serializer* slot on the *Bolt Entity* component.
 
 ## Scene loading callbacks 
 
-We have one more thing to do before we can spawn a character for our game, we need to hook into a callback on the server to instantiate our prefab for both the server and clients.
+We have one more thing to do before we can spawn a character for our game; we need to hook into a callback on the server to instantiate our prefab for both the server and clients.
 
 Create a new script called `TutorialServerCallbacks` under the *tutorial/Scripts/Callbacks* folder. 
 
@@ -186,7 +186,7 @@ public class TutorialServerCallbacks : BoltCallbacks {
 }
 ```
 
-Our `TutorialServerCallbacks` class should inherit from `BoltCallbacks`, we should also decorate the class with a `BoltGlobalBehaviour` which has the option for only running on the server passed in.
+Our `TutorialServerCallbacks` class should inherit from `BoltCallbacks`; we should also decorate the class with a `BoltGlobalBehaviour` which has the option for only running on the server passed in.
 
 We are also overriding two callbacks that have to do with scene loading, the first one called  `SceneLoadLocalDone` will be invoked when the local computer is done loading the scene and since this behaviour is marked as to only run on the server it will only be active on the server.
 
@@ -198,6 +198,6 @@ Start an instance of the server by pressing the *Play As Server* button in the *
 
 ![](images/img26.png)
 
-You can also build and launch a separate client which connects to the server, you will see that you get two *TutorialPlayer* prefab instances in the hierarchy.
+You can also build and launch a separate client which connects to the server; you will see that you get two *TutorialPlayer* prefab instances in the hierarchy.
 
 [Next Chapter >>](chapter3.md)
