@@ -23,7 +23,7 @@ public class TutorialPlayerObject {
 }
 ``` 
 
-The is a standard C# class, it does **not** inherit from unitys `MonoBehaviour` class. This is very important. It also contains two fields called `character` and `connection`. The `character` field will contain the instantiated object which represents the players character in the world. The `connection` field will contain the connection tho this player **if one exists**, this will be `null` on the server for the servers player object.
+This is a standard C# class, it does **not** inherit from unity's `MonoBehaviour` class. This is very important. It also contains two fields called `character` and `connection`. The `character` field will contain the instantiated object which represents the player's character in the world. The `connection` field will contain the connection to this player **if one exists**, this will be `null` on the server for the servers player object.
 
 We are going to add two properties also, which lets us check if this is a client or a server player object without having to deal with the `connection` field directly.
 
@@ -83,7 +83,7 @@ public static class TutorialPlayerObjectRegistry {
 
   // this simply returns the 'players' list cast to 
   // an IEnumerable<T> so that we hide the ability 
-  // to modify the playe rlist from the outside.
+  // to modify the player list from the outside.
   public static IEnumerable<TutorialPlayerObject> allPlayers {
     get { return players; }
   }
@@ -117,7 +117,7 @@ public static class TutorialPlayerObjectRegistry {
 }
 ```
 
-Open up the *TutorialServerCallbacks.cs* file an update the class we have in there, remove the two calls to `BoltNetwork.Instantiate`. 
+Open up the *TutorialServerCallbacks.cs* file and update the class we have in there, remove the two calls to `BoltNetwork.Instantiate`. 
 
 Implement the unity `Awake` function and call `TutorialPlayerObjectRegistry.CreateServerPlayer` inside it, this creates the server player for us whenever this callback object becomes active.
 
@@ -186,11 +186,11 @@ public class TutorialPlayerObject {
 }
 ```
 
-I wont explain `RandomPosition` as it simply returns a random vector (position) in the world, but let's look closer at the `Spawn` function. In `Spawn` we first check if we have a character or not and if we **dont** have one we call `BoltNetwork.Instantiate` and create one. Then we simply check if we are the server or not and call the proper method for taking or giving control.
+I won't explain `RandomPosition` as it simply returns a random vector (position) in the world, but let's look closer at the `Spawn` function. In `Spawn` we first check if we have a character or not and if we **don't** have one we call `BoltNetwork.Instantiate` and create one. Then we simply check if we are the server or not and call the proper method for taking or giving control.
 
 We then simply call the `Teleport` function on the character object which moves our player to a random position in the world.
 
-Before we start our game, there is two more things we need to handle. First open up the `TutorialPlayerCallbacks` class found in *tutorial/Scripts/Callbacks*. We are going to override a callback called `ControlOfEntityGained` which notifies us of when we get control of an entity.
+Before we start our game, there are two more things we need to handle. First open up the `TutorialPlayerCallbacks` class found in *tutorial/Scripts/Callbacks*. We are going to override a callback called `ControlOfEntityGained` which notifies us of when we get control of an entity.
 
 ```csharp
 using UnityEngine;
@@ -239,9 +239,9 @@ If you go to the *Bolt Scenes* window and click *Play As Server* you will see a 
 
 ![](images/img28.png)
 
-We have spawned our character, we have been assigned control of it and the camera is looking at it. Next up is moving around and controlling our character. You can also build a separate client and connect to the server you are starting in the editor with it, you will see that the client gets spawned properly and assigned a character just like the server is.
+We have spawned our character, we have been assigned control of it and the camera is looking at it. Next up is moving around and controlling our character. You can also build a separate client and connect to the server you are starting in the editor with it; you will see that the client gets spawned properly and assigned a character just like the server is.
 
-**Note:** *Due to the way the camera code works you can not rotate it around your character, it's completely static if the character is not moving, this is intentional*
+**Note:** *Due to the way the camera code works you cannot rotate it around your character, it's completely static if the character is not moving, this is intentional*
 
 ## Movement
 
@@ -253,7 +253,7 @@ We are going to start by creating a *Bolt Command*, we're putting it in the tuto
 
 ![](images/img30.png)
 
-If you select the command you will see it's inspector. Right now there's not much here except two headers saying *Input* and *Result*
+If you select the command you will see its inspector. Right now there's not much here except two headers saying *Input* and *Result*
 
 ![](images/img31.png)
 
