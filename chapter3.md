@@ -435,6 +435,65 @@ Assigning the state of the motor to the command passed in is very important, thi
   // ...
 ```
 
-If you hit *Play As Server* now, you should be able to run around in the world (without animations) and move your character.
+If you hit *Play As Server* now, you should be able to run around in the world (without animations) and move your character. For reference here is the complete code for `TutorialPlayerController`.
+
+```csharp
+using UnityEngine;
+
+public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState> {
+  const float MOUSE_SENSEITIVITY = 2f;
+
+  TutorialPlayerMotor _motor;
+  TutorialPlayerCommand.Input _input;
+
+  void Awake() {
+    _motor = GetComponent<TutorialPlayerMotor>();
+  }
+
+  void Update() {
+    PollKeys(true);
+  }
+
+  void PollKeys(bool mouse) {
+    _input.forward = Input.GetKey(KeyCode.W);
+    _input.backward = Input.GetKey(KeyCode.S);
+    _input.left = Input.GetKey(KeyCode.A);
+    _input.right = Input.GetKey(KeyCode.D);
+    _input.jump = Input.GetKeyDown(KeyCode.Space);
+
+    if (mouse) {
+      _input.yaw += (Input.GetAxisRaw("Mouse X") * MOUSE_SENSEITIVITY);
+      _input.yaw %= 360f;
+
+      _input.pitch += (-Input.GetAxisRaw("Mouse Y") * MOUSE_SENSEITIVITY);
+      _input.pitch = Mathf.Clamp(_input.pitch, -85f, +85f);
+    }
+  }
+
+  public override void SimulateController() {
+    PollKeys(false);
+
+    TutorialPlayerCommand cmd;
+
+    cmd = BoltFactory.NewCommand<TutorialPlayerCommand>();
+    cmd.input = this._input;
+
+    entity.QueueCommand(cmd);
+  }
+
+  public override void ExecuteCommand(BoltCommand c, bool resetState) {
+    TutorialPlayerCommand cmd = (TutorialPlayerCommand)c;
+
+    if (resetState) {
+      // we got a correction from the server, reset (this only runs on the client)
+      _motor.SetState(cmd.state);
+    }
+    else {
+      // apply movement (this runs on both server and client)
+      cmd.state = _motor.Move(cmd.input);
+    }
+  }
+}
+``` 
 
 [Next Chapter >>](chapter4.md)
