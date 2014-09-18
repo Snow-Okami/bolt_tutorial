@@ -500,4 +500,8 @@ Here is a screenshot of the server (in the editor) with two clients connected.
 
 ![](images/img39.png) 
 
+Here is also a video, demonstrating that the movement is infact 100% authoritative.
+
+[![](http://img.youtube.com/vi/mJnPOU6xFdc/0.jpg)](http://www.youtube.com/watch?v=mJnPOU6xFdc)
+
 [Next Chapter >>](chapter4.md)
