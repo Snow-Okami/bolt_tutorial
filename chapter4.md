@@ -15,7 +15,7 @@ The first thing we are going to do is to create a Bolt Mecanim Asset, right clic
 If you select our *TutorialPlayerMecanim* asset, you will see two options.
 
 * **Mecanim Controller** is the mecanim controller we want to replicate.
-* **Replicate Layer Weights** lets us replicate mecanim layer weights, this is a simple on/off toggle.
+* **Replicate Layer Weights** lets us replicate mecanim layer weights; this is a simple on/off toggle.
 
 ![](images/img42.png)
 
@@ -27,7 +27,7 @@ As soon as you drop the mecanim controller in the correct slot you will see that
 
 ![](images/img44.png)
 
-We also need to hook up our *sgtBolt4Merged* mecanim controller to our prefab, on our *TutorialPlayer* prefab in *tutorial/Prefabs* expand it and find the *sgtBolt4Merged-ModelOnly* child to it. Make sure to add the *sgtBolt4Merged* mecanim controller to its *Animator* component.
+We also need to hook up our *sgtBolt4Merged* mecanim controller to our prefab; on our *TutorialPlayer* prefab in *tutorial/Prefabs* expand it and find the *sgtBolt4Merged-ModelOnly* child to it. Make sure to add the *sgtBolt4Merged* mecanim controller to its *Animator* component.
  
 ![](images/img46.png)
 
