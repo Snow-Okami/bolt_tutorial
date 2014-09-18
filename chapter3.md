@@ -282,4 +282,41 @@ The **result** state of applying our input is represented by the following four 
 * **isGrounded** - Bool. If we are touching the ground or not.
 * **jumpFrames** - Byte. This one is a bit tricky to explain, but it basically counts how many "frames" we have left of applying our jump force on. This is a detail specific to the character motor we will be using.
 
+![](images/img33.png)
+
+Our command is done, we are going to add more to it later but for now it's all we need to get movement working. 
+
+Compile Bolt again by going to *Assets/Compile Bolt Assets*, doing this Bolt will update it's internal data with the new command we created.
+
+The next thing we need to setup is the character motor, this is the component that is responsible for  moving our character around in the world. Create a new file called *TutorialPlayerMotor.cs* in *tutorial/Scripts/Player*.  
+
+Writing an entire character motor is well outside the scope of this tutorial, so we are providing the source code to an existing one. You will find it in *bolt_tutorial/code_templates/TutorialPlayerMotor.txt*, copy the entire contents of this file to your new *TutorialPlayerMotor.cs* script. 
+
+The *TutorialPlayerCommand* that we created earlier is made to fit exactly with the motor, so if you are getting any compilation errors when you copy-paste the *TutorialPlayerMotor.cs* code, verify that the following is correct:
+
+1. You are using the exact sae property names and types for Input and Result on the command.
+2. You have run the *Assets/Compile Bolt Asset* menu opton.
+
+![](images/img34.png)
+
+Attach a copy of the *TutorialPlayerMotor* component to your *TutorialPlayer* prefab, also attach a *Character Controller* component to it. Make sure that the Center value for the *Character Controller* is set to (0, 1, 0) and that the Radius is set to 0.55.
+
+If you drag a copy of your prefab into the scene window it should look something like this. **Make sure to delete the prefab copy before you continue.**   
+
+![](images/img35.png)
+
+Create a new script called *TutorialPlayerController.cs* in the *tutorial/Scripts/Player* folder.
+
+![](images/img37.png)
+
+Our new class should inherit from `BoltEntityBehaviour<ITutorialPlayerState>` which gives us direct and static access to the data on our TutorialPlayerState asset.
+
+```csharp
+using UnityEngine;
+
+public class TutorialPlayerController : BoltEntityBehaviour<ITutorialPlayerState> {
+
+}
+```
+
 [Next Chapter >>](chapter4.md)
