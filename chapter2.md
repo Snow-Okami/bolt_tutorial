@@ -144,7 +144,7 @@ Both our *Transform* and *Mecanim* properties should be set to **Everyone Except
 
 It's time to compile Bolt again, from the top menu select *Bolt/Compile Assets*, Bolt will go through all assets and find the TutorialPlayerState asset and compile it into an interface called `ITutorialPlayerState`.
 
-Create a new C# script in the *tutorial/Scripts/Player* folder, name it *TutorialPlayerSerializer*.
+Create a new C# script in the *tutorial/Scripts/TutorialPlayer* folder, name it *TutorialPlayerSerializer*.
 
 ![](images/img23.png)
 
