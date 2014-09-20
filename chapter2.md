@@ -21,7 +21,7 @@ Time to create our first script, in our own tutorial folder create a script call
 ```csharp
 using UnityEngine;
 
-[BoltGlobalBehaviour]
+[BoltGlobalBehaviour("Level2")]
 public class TutorialPlayerCallbacks : BoltCallbacks {
   public override void SceneLoadLocalDone(string map) {
 	// this just instantiates our player camera, 
@@ -33,11 +33,11 @@ public class TutorialPlayerCallbacks : BoltCallbacks {
 
 ![](images/img12.png)
 
-Before we start our game it's probably a good idea to explain exactly what is going on here. What does the `[BoltGlobalBehaviour]` actually do? When Bolt starts, it will find *all* classes which have the `[BoltGlobalBehaviour]` and in some way or another inherit from `MonoBehaviour` (Since `BoltCallbacks` itself inherits from `MonoBehaviour` our own class `TutorialPlayerCallbacks` is also considered as inheriting from `MonoBehaviour`). 
+Before we start our game it's probably a good idea to explain exactly what is going on here. What does the `[BoltGlobalBehaviour("Level2")]` actually do? When Bolt starts, it will find *all* classes which have the `[BoltGlobalBehaviour("Level2")]` and in some way or another inherit from `MonoBehaviour` (Since `BoltCallbacks` itself inherits from `MonoBehaviour` our own class `TutorialPlayerCallbacks` is also considered as inheriting from `MonoBehaviour`). 
 
 Bolt will then go through the classes it found matching these two conditions and create instances of them automatically for you, so that they exist when Bolt is running and are destroyed when Bolt is shut down. Any instances which are created will be added to the 'Bolt' game object which is automatically created by Bolt on start, and you can clearly see it in your scene hierarchy.
 
-There are a couple of ways to configure how `[BoltGlobalBehaviour]` will act, the first and most simple one is that you can decide if the behaviour in question should run on either the server or client, or both. Specifying nothing like we did for our `TutorialPlayerCallbacks` class means it will run on both the server and client.
+There are a couple of ways to configure how `[BoltGlobalBehaviour("Level2")]` will act, the first and most simple one is that you can decide if the behaviour in question should run on either the server or client, or both. Specifying nothing like we did for our `TutorialPlayerCallbacks` class means it will run on both the server and client.
 
 ```csharp
 // only on the server
@@ -47,7 +47,7 @@ There are a couple of ways to configure how `[BoltGlobalBehaviour]` will act, th
 [BoltGlobalBehaviour(BoltNetworkModes.Client)]
 ```
 
-You can also tell Bolt that a behaviour should only be available during specific scenes, for example our scene is called *Level2* and if we only wanted our behaviour to run during this scene, we could configure the `[BoltGlobalBehaviour]` like this.
+You can also tell Bolt that a behaviour should only be available during specific scenes, for example our scene is called *Level2*.
 
 ```csharp
 // only when the current scene is 'Level2'

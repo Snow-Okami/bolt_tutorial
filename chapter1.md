@@ -98,7 +98,12 @@ One last thing we need to do before we continue is to setup the correct Layers w
 
 ![](images/img38.png)
 
+## Playing the finished game
 
-That was all for this chapter, in the next one we will start developing code for our game.
+If you want to play the finished game that we are going to build in the tutorial add the scene found in *bolt_tutorial/scenes* called *Level1* to your *Build Settings*, it will then show up in the *Bolt Scenes* window like this.
+
+![](images/img48.png)
+
+You can now start this level as you wish, run around and test out all the features of the game, etc. That was all for this chapter, in the next one we will start developing code for our game.
 
 [Next Chapter >>](chapter2.md)

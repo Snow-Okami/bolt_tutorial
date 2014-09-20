@@ -126,7 +126,7 @@ Also in `TutorialServerCallbacks` override the method called `ClientConnected` w
 ```csharp
 using UnityEngine;
 
-[BoltGlobalBehaviour(BoltNetworkModes.Server)]
+[BoltGlobalBehaviour(BoltNetworkModes.Server, "Level2")]
 public class TutorialServerCallbacks : BoltCallbacks {
   void Awake() {
     TutorialPlayerObjectRegistry.CreateServerPlayer();
@@ -195,7 +195,7 @@ Before we start our game, there are two more things we need to handle. First ope
 ```csharp
 using UnityEngine;
 
-[BoltGlobalBehaviour]
+[BoltGlobalBehaviour("Level2")]
 public class TutorialPlayerCallbacks : BoltCallbacks {
   public override void SceneLoadLocalDone(string map) {
     // this just instantiates our player camera, 
@@ -215,7 +215,7 @@ The last thing we need to do is go back to the `TutorialServerCallbacks` and cal
 ```csharp
 using UnityEngine;
 
-[BoltGlobalBehaviour(BoltNetworkModes.Server)]
+[BoltGlobalBehaviour(BoltNetworkModes.Server, "Level2")]
 public class TutorialServerCallbacks : BoltCallbacks {
   void Awake() {
     TutorialPlayerObjectRegistry.CreateServerPlayer();
