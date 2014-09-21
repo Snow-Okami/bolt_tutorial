@@ -435,7 +435,7 @@ Assigning the state of the motor to the command passed in is very important, thi
   // ...
 ```
 
-If you hit *Play As Server* now, you should be able to run around in the world (without animations) and move your character. For reference here is the complete code for `TutorialPlayerController`.
+Attach a copy of the *TutorialPlayerController* component to your *TutorialPlayer* prefab and if you hit *Play As Server* now, you should be able to run around in the world (without animations) and move your character. For reference here is the complete code for `TutorialPlayerController`.
 
 ```csharp
 using UnityEngine;
