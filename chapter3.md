@@ -389,7 +389,7 @@ Next we are calling `BoltFactory.NewCommand<TutorialPlayerCommand>()` to create 
 
 Since we are using the `TutorialPlayerCommand.Input` type for our class variable `_input` we can just assign this to the input of the command right away.
 
-The last thing we will do is to call `QueueCommand` on our entity, this sends the command of to both the server and client for processing and is what lets Bolt do its client prediction but still maintain authority on the server. 
+The last thing we will do is to call `QueueCommand` on our entity, this sends the command to both the server and client for processing and is what lets Bolt do its client prediction but still maintain authority on the server. 
 
 ```csharp
   // ..
